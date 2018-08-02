@@ -1,16 +1,16 @@
 package com.example.crist.myapplication;
 
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
+import android.view.*;
+import android.widget.Toast;
 
 public class HeaderDialogFragment  extends DialogFragment {
 
@@ -41,5 +41,26 @@ public class HeaderDialogFragment  extends DialogFragment {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         return dialog;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.save_menu, menu);
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.save){
+            Toast.makeText(getContext(), "Realizar petición", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.home) {
+            dismiss();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -7,9 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import java.util.ArrayList;
+
+import static com.example.crist.myapplication.R.layout.activity_panel;
 
 public class PanelActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -18,9 +21,7 @@ public class PanelActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_panel);
-
-        final FloatingActionButton floatingActionButton = (FloatingActionButton)findViewById(R.id.add1);
+        setContentView(activity_panel);
 
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -34,9 +35,21 @@ public class PanelActivity extends AppCompatActivity implements View.OnClickList
         headerAdapter = new HeaderAdapter(mDataset);
         recyclerView.setAdapter(headerAdapter);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        final FloatingActionButton floatingActionButton = (FloatingActionButton)findViewById(R.id.add1);
         floatingActionButton.setOnClickListener(this);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 || dy < 0 && floatingActionButton.isShown()){
+                    floatingActionButton.hide();
+                }
+            }
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE){
@@ -44,13 +57,6 @@ public class PanelActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0 || dy < 0 && floatingActionButton.isShown()){
-                    floatingActionButton.hide();
-                }
             }
         });
 
@@ -66,10 +72,10 @@ public class PanelActivity extends AppCompatActivity implements View.OnClickList
         HeaderDialogFragment newFragment = new HeaderDialogFragment();
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-
-        transaction.add(android.R.id.content, newFragment)
+        transaction.add(R.id.content, newFragment)
                 .addToBackStack(null).commit();
+
+
     }
 }
